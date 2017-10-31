@@ -21,7 +21,7 @@ classdef operated_picture
         [C_X,C_Y]=obj.reference_object_entire.worldToSubscript(height_snippet/2,-width_snippet/2)
         [A_X,A_Y]=obj.reference_object_entire.worldToSubscript(-height_snippet/2,width_snippet/2)
         
-        obj.snippet_Data=obj.Data(D_X:A_X-1,D_Y:C_Y-1);
+        obj.snippet_Data=obj.Data(D_X:A_X,D_Y:C_Y);
         obj.reference_object_snippet=imref2d(size(obj.snippet_Data),[-width_snippet/2 width_snippet/2],[-height_snippet/2 height_snippet/2]);
         
         

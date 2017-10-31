@@ -5,8 +5,8 @@ function [ warp_param] = warpestimator_func(T,I)
 warp_param=[0,0,0,0]; %[x-translation,y-translation,scale,rotation]
 %precalculations
 [Gx,Gy]=gradientcalc(T.Data);%gradient bedenken 
-gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T.snippet_Data); %gradient times jacobian at x=0 %chagned
-hessian=calc_hessian(gradient_times_jacobian); 
+gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T.snippet_Data); %gradient times jacobian at x=0
+hessian=calc_hessian(gradient_times_jacobian);
 
 
 %warpablepicI=pic2warpablepic(I); % brings the picture in a state so that 

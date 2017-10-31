@@ -1,4 +1,4 @@
-function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y)
+function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displacement_y,heigth_snippet,width_snippet,scale,alpha,offset_x,offset_y)
 %creates the 
 %   Detailed explanation goes here
 
@@ -28,16 +28,16 @@ T=operated_picture(Data,height_snippet,width_snippet);
             
  from_origin_transform=[1 0 0; ...
                         0 1 0;
-                       -displacement_x-mean(T.reference_object_entire.XIntrinsicLimits) -displacement_y-mean(T.reference_object_entire.YIntrinsicLimits) 1];
+                       -displacement_x-mean(T.reference_object.XIntrinsicLimits) -displacement_y-mean(T.reference_object.YIntrinsicLimits) 1];
             
- t_transform=[1 0 0; ...
+t_tranform=[1 0 0; ...
             0 1 0;
             -offset_x -offset_y 1;]
             
 
 
 transform =affine2d(from_origin_transform*r_transform*t_transform);%*from_origin_transform);
-[warped_image,reference_object]=imwarp(image,transform,'cubic','Outputview',reference_object);
+[warped_image,reference_object]=imwarp(image,transform,'cubic','Outputview',T.reference_object);
 
 %
 %imwarp(T.Data,T.reference_object_entire,affine2d(eye(3)),'OutputView',T.reference_object_snippet);
@@ -59,7 +59,7 @@ transform =affine2d(from_origin_transform*r_transform*t_transform);%*from_origin
 
 %figure
 %imshow(warped_image)
-
-I=operated_picture(warped_image,height_snippet,width_snippet);
+center_world=(size(warped_image).')./2;
+I=operated_picture(D,C,B,A,warped_image);
 
 end

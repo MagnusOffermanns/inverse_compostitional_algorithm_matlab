@@ -21,8 +21,6 @@ size_picx=200;   %just uneven numbers
 size_picy=100;  
 offset_y=0;
 offset_x=0;
-width_snippet=1;%world coordinates
-height_snippet=1
 % D=[50*1/2;-100*1/2]; %y,x
 % A=[-50*1/2;-100*1/2];
 % C=[50*1/2;100*1/2];
@@ -31,6 +29,7 @@ height_snippet=1
 %A=[-2.5,-2.5]
 %C=[2.5;2.5]
 %B=[-2.5;2.5]
+center_world=[size_picy/2;size_picx/2];
 alpha=2*pi/360*25; %0.0175
 scale=0;
 
