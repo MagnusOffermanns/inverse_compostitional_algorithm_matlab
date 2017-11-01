@@ -6,7 +6,7 @@ classdef operated_picture
     properties
         Data
         reference_object_entire
-        snippet_Data
+        Data_snippet
         reference_object_snippet
         
     end
@@ -21,8 +21,8 @@ classdef operated_picture
         [C_X,C_Y]=obj.reference_object_entire.worldToSubscript(height_snippet/2,-width_snippet/2)
         [A_X,A_Y]=obj.reference_object_entire.worldToSubscript(-height_snippet/2,width_snippet/2)
         
-        obj.snippet_Data=obj.Data(D_X:A_X,D_Y:C_Y);
-        obj.reference_object_snippet=imref2d(size(obj.snippet_Data),[-width_snippet/2 width_snippet/2],[-height_snippet/2 height_snippet/2]);
+        obj.Data_snippet=obj.Data(D_X:A_X-1,D_Y:C_Y-1);
+        obj.reference_object_snippet=imref2d(size(obj.Data_snippet),[-width_snippet/2 width_snippet/2],[-height_snippet/2 height_snippet/2]);
         
         
         
@@ -54,23 +54,40 @@ classdef operated_picture
 %            %obj.reference_object=imref2d(size(obj.Data));
 %         end
         
-%         function obj=rotate_world(obj,alpha)
-%             
-%         
-%             %temp_size=size(obj.Data); %saving of the size of the picture before warp
-%             to_origin_transform=[1 0 0;...
-%                                  0 1 0;...
-%                                  mean(obj.reference_object.XWorldLimits) mean(obj.reference_object.YWorldLimits) 1]
-%             r_transform =[cos(alpha) -sin(alpha) 0; sin(alpha) cos(alpha) 0; 0 0 1]; %rotation around the center
-%             from_origin_transform=[1 0 0; ...
-%                                  0 1 0;...
-%                                  -mean(obj.reference_object.XWorldLimits) -mean(obj.reference_object.YWorldLimits) 1];
-%             transform=affine2d(to_origin_transform*r_transform*from_origin_transform);
-%             [obj.Data,reference_data]=imwarp(obj.Data,transform,'cubic');
-%                 obj.reference_object=reference_data;
-%            %center_coordinates_new=(ceil(size(obj.Data)/2)).';
-%             %obj=obj.set_camera(center_coordinates_new);
-%         end
+        function obj=rotate_op(obj,alpha)
+            
+        
+            %temp_size=size(obj.Data); %saving of the size of the picture before warp
+            to_origin_transform=[1 0 0;...
+                                 0 1 0;...
+                                 mean(obj.reference_object.XWorldLimits) mean(obj.reference_object.YWorldLimits) 1];
+            r_transform =[cos(alpha) -sin(alpha) 0; sin(alpha) cos(alpha) 0; 0 0 1]; %rotation around the center
+            from_origin_transform=[1 0 0; ...
+                                 0 1 0;...
+                                 -mean(obj.reference_object.XWorldLimits) -mean(obj.reference_object.YWorldLimits) 1];
+            
+                             transform=affine2d(to_origin_transform*r_transform*from_origin_transform);
+            
+                             [obj.Data,obj.reference_data_entire]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
+                
+        end
+        
+        function obj=translate_op(obj,translation_vector) %translationvector ist [x,y,z]
+            translation_vector(1)=translation_vector()*obj.reference_object_snippet.PixelExtentInWorldX;
+            translation_vector(2)=transaltion_vector*obj.reference_object_snippet.PixelExtentInWorldY;
+            transform_t=[1 0 0;...
+                         0 1 0;...
+                         -translation_vector(1) -translation_vector(2) 1];
+        
+            transform=affine2d(transform_t);
+            [obj.Data,obj.reference_object_entire]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
+        end
+        
+        
+        function obj=get_Data_snippet(obj) %save
+           transform=affine2d(eye(3));
+           obj.Data_snippet=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic','OutputView',obj.reference_object_snippet);
+        end
 %             % temp_size=ceil((size(obj.Data)-temp_size)/2); %coordinate difference between old and new picture
 %             %obj=obj.translate_camera([-temp_size.';0]); %
 %            % obj.plot_camera_pos();

@@ -6,7 +6,8 @@ reference_object=imref2d([size_picy size_picx]);
 to_origin_transform=[1 0 0;...
                      0 1 0;...
                      -displacement_x-mean(reference_object.XIntrinsicLimits) -displacement_y-mean(reference_object.YIntrinsicLimits) 1];
-         to_origin_transform=affine2d(to_origin_transform);
+
+                 to_origin_transform=affine2d(to_origin_transform);
          
          reference_object.XWorldLimits=reference_object.XWorldLimits-mean(reference_object.XIntrinsicLimits);
          reference_object.YWorldLimits=reference_object.YWorldLimits-mean(reference_object.YIntrinsicLimits);

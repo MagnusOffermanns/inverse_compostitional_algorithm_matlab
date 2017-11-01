@@ -4,25 +4,25 @@ function [ warp_param] = warpestimator_func(T,I)
 %profile on;
 warp_param=[0,0,0,0]; %[x-translation,y-translation,scale,rotation]
 %precalculations
-[Gx,Gy]=gradientcalc(T.Data);%gradient bedenken 
-gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T.snippet_Data); %gradient times jacobian at x=0 %chagned
+[Gx,Gy]=gradientcalc(T.Data_snippet);%gradient bedenken 
+gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T); %gradient times jacobian at x=0 %chagned
 hessian=calc_hessian(gradient_times_jacobian); 
 
 
 %warpablepicI=pic2warpablepic(I); % brings the picture in a state so that 
                                              %a warp can be applied
 
-runtime=500;
+runtime=200;
 error_vector=zeros(1,runtime);
 error_plot_flag=0;
 for ii=1:runtime% does the estimation 100 times since I dont know the estimated error 
 
-[Snap_I]=warp_func(warp_param,I,T);
+[I_temp]=warp_func(warp_param,I);
 
 %[Gx,Gy,size_x,size_y]=gradientcalc(effektive_picture_scaled); %muss nicht gewarped werden da es gleich gross ist wie I und die Border sich gleich verschiebt
 
 
-[delta_p,error_num]=calc_delta_p(T.snap(0,0),Snap_I,hessian,gradient_times_jacobian,error_plot_flag);
+[delta_p,error_num]=calc_delta_p(T,I_temp,hessian,gradient_times_jacobian,error_plot_flag);
 error_vector(ii)=error_num;
 
 error_plot_flag=0;
