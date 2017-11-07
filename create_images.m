@@ -32,13 +32,13 @@ T=operated_picture(Data,height_snippet,width_snippet);
                        -displacement_x-mean(T.reference_object_entire.XIntrinsicLimits) -displacement_y-mean(T.reference_object_entire.YIntrinsicLimits) 1];
             
  t_transform=[1 0 0; ...
-            0 1 0;
-            -offset_x -offset_y 1;]
+              0 1 0;
+              -offset_x -offset_y 1;]
             
 
 
 transform =affine2d(from_origin_transform*r_transform*t_transform);%*from_origin_transform);
-[warped_image,reference_object]=imwarp(image,transform,'cubic','Outputview',reference_object);
+[warped_image]=imwarp(image,transform,'cubic','Outputview',reference_object);
 
 %
 %imwarp(T.Data,T.reference_object_entire,affine2d(eye(3)),'OutputView',T.reference_object_snippet);

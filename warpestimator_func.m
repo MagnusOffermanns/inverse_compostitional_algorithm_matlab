@@ -12,7 +12,7 @@ hessian=calc_hessian(gradient_times_jacobian);
 %warpablepicI=pic2warpablepic(I); % brings the picture in a state so that 
                                              %a warp can be applied
 
-runtime=200;
+runtime=400;
 error_vector=zeros(1,runtime);
 error_plot_flag=0;
 for ii=1:runtime% does the estimation 100 times since I dont know the estimated error 

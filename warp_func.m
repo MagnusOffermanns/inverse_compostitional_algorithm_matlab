@@ -3,7 +3,7 @@ function [I_temp] = warp_func(warp_param,I)
 %   Detailed explanation goes here
 
 I_temp=I;
-%I_temp=I_temp.rotate_world(warp_param(4)); %correct
+I_temp=I_temp.rotate_op(warp_param(4)); %correct
 %imshow(I.Data)
 I_temp=I_temp.translate_op([warp_param(1);warp_param(2);warp_param(3)]); %x,y,z
 %translation correct scale broken

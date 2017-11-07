@@ -19,11 +19,11 @@ for yy=1:T.reference_object_snippet.ImageSize(1)
        %    calculated_jacobian=[1,0,-(xx/(1+0)^2)*cos(0)+(yy/(1+0)^2)*sin(0),-sin(0)*(xx/(1+0))-cos(0)*(yy/(1+0));...
        %                  0,1,-(xx/(1+0))*sin(0)-(yy/(1+0))*cos(0),cos(0)*(xx/(1+0))-sin(0)*(yy/1+0)];
   %translation jacobian
-  calculated_jacobian=[1,0,0,0;0,1,0,0];
+ % calculated_jacobian=[1,0,0,0;0,1,0,0];
  %scaling jacobian
 %calculated_jacobian=[0,0,-xx/(1+0)^2,0;0,1,-yy/(1+0)^2,0];
  %rotation jacobian and translation jacobian
- %calculated_jacobian=[0,0,0,1*(-sin(0)*xx-cos(0)*yy);0,0,0,1*(cos(0)*xx-sin(0)*yy)];
+ calculated_jacobian=[1,0,0,1*(-sin(0)*xx-cos(0)*yy);0,1,0,1*(cos(0)*xx-sin(0)*yy)];
  
  
  gradient_times_jacobian((yy-1)*T.reference_object_snippet.ImageSize(2)+xx,:)=[Gx(yy,xx),Gy(yy,xx)]*calculated_jacobian;

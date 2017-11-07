@@ -10,7 +10,7 @@ error_num=0;
 % end
 
 
-for yy=1:T.reference_object_snippet.ImageSize(1)
+parfor yy=1:T.reference_object_snippet.ImageSize(1)
     for xx=1:T.reference_object_snippet.ImageSize(2)
         error_num=error_num+double(T.Data_snippet(yy,xx)-I.Data_snippet(yy,xx));
         %error_num=error_num+double((T(yy+border_y,xx+border_x)-I(yy+w_border_y,xx+w_border_x)));%calculation of the error at pixel xx,yy
