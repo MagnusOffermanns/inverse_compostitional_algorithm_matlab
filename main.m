@@ -13,7 +13,7 @@ tic
  %Image(floor(size(Image,1)/2),floor(size(Image,2)/2+1))=255;
  %Image(floor(size(Image,1)/2+1),floor(size(Image,2)/2+1))=255;
 Image=rgb2gray(imread('test_pic4.jpg'));
-Image=double(Image/255);
+Image=double(Image)/255;
 %Image=create_cross(size(Image,1),size(Image,2));
  
 displacement_y=size(Image,1)/4+70; 
@@ -33,7 +33,7 @@ height_snippet=1
 %C=[2.5;2.5]
 %B=[-2.5;2.5]
 alpha=2*pi/360*1; %0.0175
-scale=0
+scale=-0.00;
 
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 %plot2pictures(T,I)
