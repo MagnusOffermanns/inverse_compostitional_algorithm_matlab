@@ -11,7 +11,6 @@ I_temp=I;
 %scaling
 I_temp=I_temp.scale_op(warp_param(3));
 %I_temp.plot_camera_pos();
-%now scaling dann fertig :)
 
 I_temp=I_temp.get_Data_snippet(warp_param);
 

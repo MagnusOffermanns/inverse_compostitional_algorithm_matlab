@@ -16,8 +16,8 @@ Image=rgb2gray(imread('test_pic4.jpg'));
 Image=double(Image)/255;
 %Image=create_cross(size(Image,1),size(Image,2));
  
-displacement_y=size(Image,1)/4+70; 
-displacement_x=size(Image,2)/4+70;
+displacement_y=size(Image,1)/4+100; 
+displacement_x=size(Image,2)/4+100;
 size_picx=size(Image,2)/6;   
 size_picy=size(Image,1)/6;  
 offset_y=0;

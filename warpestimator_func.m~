@@ -49,7 +49,7 @@ function [] = cleanMeUp()
 
 global error_vector;
 figure
-error_vector=error_vector(error_vector~=-1)
+error_vector=error_vector(error_vector~=0)
 plot(error_vector);
 
 end
