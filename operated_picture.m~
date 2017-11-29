@@ -99,8 +99,8 @@ classdef operated_picture
                                 0 1 0;...
                                 mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
           transform=affine2d(to_origin_transform*s_transform*from_origin_transform);
-                             [obj.Data,obj.reference_object_entire]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
-                            
+                             [obj.Data]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
+                            obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
                              
                           
                              
@@ -108,10 +108,20 @@ classdef operated_picture
         end
         
         
-        function obj=get_Data_snippet(obj,warp_vector) %save
-           transform=affine2d([1/(1+scale) 0 0;...
-            0 1/(1+scale) 0 ;...
-            0 0 1];);
+        function obj=get_Data_snippet(obj,warp_param) %save
+           to_origin_transform=[1 0 0;...
+                                 0 1 0;...
+                                 -mean(obj.reference_object_entire.XWorldLimits) -mean(obj.reference_object_entire.YWorldLimits) 1];
+            
+            transform=affine2d([1/(1+warp_param(3)) 0 0;...
+            0 1/(1+warp_param(3)) 0 ;...
+            0 0 1]);
+            
+            from_origin_transform=[1 0 0; ...
+                                0 1 0;...
+                                mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
+           
+            transform=affine2d(to_origin_transform*s_transform*from_origin_transform);
            obj.Data_snippet=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic','OutputView',obj.reference_object_snippet);
         end
         
