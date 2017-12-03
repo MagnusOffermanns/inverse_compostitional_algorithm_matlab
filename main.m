@@ -36,7 +36,7 @@ alpha=2*pi/360*0.5; %0.0175
 scale=0.01; %minus -> bigger plus -> smaller
 
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
-%plot2pictures(T,I)
+plot2pictures(T,I)
 translation_vector=[I.reference_object_entire.PixelExtentInWorldY*offset_y,... %debug information
     I.reference_object_entire.PixelExtentInWorldX*offset_x]
 warp_parameters=warpestimator_func(T,I);
