@@ -16,12 +16,12 @@ Image=rgb2gray(imread('test_pic4.jpg'));
 Image=double(Image)/255;
 %Image=create_cross(size(Image,1),size(Image,2));
  
-displacement_y=size(Image,1)/4+70; 
-displacement_x=size(Image,2)/4+70;
+displacement_y=size(Image,1)/4+100; 
+displacement_x=size(Image,2)/4+100;
 size_picx=size(Image,2)/6;   
 size_picy=size(Image,1)/6;  
-offset_y=3;
-offset_x=2;
+offset_y=0;
+offset_x=0;
 width_snippet=1;%world coordinates from -1 to 1
 height_snippet=1
 % D=[50*1/2;-100*1/2]; %y,x
@@ -32,8 +32,8 @@ height_snippet=1
 %A=[-2.5,-2.5]
 %C=[2.5;2.5]
 %B=[-2.5;2.5]
-alpha=2*pi/360*0.5; %0.0175
-scale=0.01; %minus -> bigger plus -> smaller
+alpha=2*pi/360*0; %0.0175
+scale=-0.01; %minus -> bigger plus -> smaller
 
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 %plot2pictures(T,I)
