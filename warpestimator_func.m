@@ -13,7 +13,7 @@ hessian=calc_hessian(gradient_times_jacobian);
 %warpablepicI=pic2warpablepic(I); % brings the picture in a state so that 
                                              %a warp can be applied
 
-runtime=150;
+runtime=300;
 global error_vector;
 error_vector = -1*ones(1,runtime);
 cleanupObj = onCleanup(@()cleanMeUp());
@@ -39,7 +39,6 @@ end
 
 figure
 plot(error_vector);
-debug_func(T,I,warp_param);
 %profile viewer
 
 end
@@ -50,9 +49,8 @@ function [] = cleanMeUp()
 
 global error_vector;
 figure
-error_vector=error_vector(error_vector~=-1);
+error_vector=error_vector(error_vector~=-1)
 plot(error_vector);
-
 
 end
 
