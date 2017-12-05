@@ -7,7 +7,7 @@ I_temp=warp_func(warp_parameters,I)
 post_error=T.Data_snippet-I_temp.Data_snippet;
 post_error_sum=sum(sum(abs(T.Data_snippet-I_temp.Data_snippet)));
 
-disp(['previouse error: ',num2str(previouse_error_sum),' post_error: ',num2str(post_error_sum)])
+disp(['previouse error: ',num2str(previouse_error_sum),' post_error: ',num2str(post_error_sum)]);
 
 figure
 subplot(2,1,1)       % add first plot in 2 x 1 grid

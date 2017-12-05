@@ -14,7 +14,7 @@ classdef operated_picture
     methods
         function obj=operated_picture(Image,height_snippet,width_snippet)
         
-        obj.Data=Image
+        obj.Data=Image;
         obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
         
         [D_X,D_Y]=obj.reference_object_entire.worldToSubscript(-height_snippet/2,-width_snippet/2);  %x,y
@@ -54,7 +54,7 @@ classdef operated_picture
 %            %obj.reference_object=imref2d(size(obj.Data));
 %         end
         
-        function obj=rotate_op(obj,alpha)
+        function obj=rotate_op(obj,warp_param)
             
         
             %temp_size=size(obj.Data); %saving of the size of the picture before warp
@@ -62,7 +62,7 @@ classdef operated_picture
              to_origin_transform=[1 0 0;...
                                  0 1 0;...
                                  -mean(obj.reference_object_entire.XWorldLimits) -mean(obj.reference_object_entire.YWorldLimits) 1];
-            r_transform =[cos(alpha) -sin(alpha) 0; sin(alpha) cos(alpha) 0; 0 0 1]; %rotation around the center
+            r_transform =[cos(warp_param(4)) -sin(warp_param(4)) 0; sin(warp_param(4)) cos(warp_param(4)) 0; 0 0 1]; %rotation around the center
              from_origin_transform=[1 0 0; ...
                                     0 1 0;...
                                    mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
@@ -86,18 +86,20 @@ classdef operated_picture
             [obj.Data,obj.reference_object_entire]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
         end
         
-        function obj=scale_op(obj,scale)
+        function obj=scale_op(obj,warp_param)
+            
             to_origin_transform=[1 0 0;...
                                  0 1 0;...
                                  -mean(obj.reference_object_entire.XWorldLimits) -mean(obj.reference_object_entire.YWorldLimits) 1];
             
-            s_transform=[(1+scale) 0 0;...
-            0 (1+scale) 0 ;...
+            s_transform=[(1+warp_param(3)) 0 0;...
+            0 (1+warp_param(3)) 0 ;...
             0 0 1];
             
          from_origin_transform=[1 0 0; ...
                                 0 1 0;...
                                 mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
+                            
           transform=affine2d(to_origin_transform*s_transform*from_origin_transform);
                              [obj.Data]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
                             obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
@@ -109,9 +111,18 @@ classdef operated_picture
         
         
         function obj=get_Data_snippet(obj,warp_param) %save
-           transform=affine2d([1/(1+warp_param(3)) 0 0;...
+           to_origin_transform=[1 0 0;...
+                                 0 1 0;...
+                                 -mean(obj.reference_object_entire.XWorldLimits) -mean(obj.reference_object_entire.YWorldLimits) 1];
+            
+            transform=[1/(1+warp_param(3)) 0 0;...
             0 1/(1+warp_param(3)) 0 ;...
-            0 0 1]);
+            0 0 1];
+        
+            from_origin_transform=[1 0 0; ...
+                                0 1 0;...
+                                mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
+                            transform=affine2d(to_origin_transform*transform*from_origin_transform);
            obj.Data_snippet=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic','OutputView',obj.reference_object_snippet);
         end
         

@@ -45,7 +45,7 @@ s_transform=[1/(1+scale) 0 0;...
 %translation matrix            
  t_transform=[1 0 0; ...
               0 1 0;
-              -offset_x -offset_y 1;]
+              -offset_x -offset_y 1;];
             
 
 % create affine 2d object for the warp

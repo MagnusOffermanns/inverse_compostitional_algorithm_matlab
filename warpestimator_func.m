@@ -15,7 +15,10 @@ hessian=calc_hessian(gradient_times_jacobian);
 
 runtime=300;
 global error_vector;
-error_vector = -1*ones(1,runtime);
+global warp_param_vector;
+error_vector = -100*ones(1,runtime);
+warp_param_vector=-100*ones(4,runtime);
+
 cleanupObj = onCleanup(@()cleanMeUp());
 error_plot_flag=0;
 for ii=1:runtime% does the estimation 100 times since I dont know the estimated error 
@@ -32,6 +35,7 @@ error_plot_flag=0;
 
 
 warp_param=warp_param+transpose(delta_p);
+warp_param_vector(:,ii)=transpose(warp_param);
 update=['xtranslation: ',num2str(warp_param(1)),'  y translation: ', num2str(warp_param(2)), '  scale: ', num2str(warp_param(3)),'  rotation: ', num2str(warp_param(4)),' iteration: ',num2str(ii)];
 disp(update);
 end
@@ -39,6 +43,7 @@ end
 
 figure
 plot(error_vector);
+
 %profile viewer
 
 end
@@ -48,10 +53,24 @@ function [] = cleanMeUp()
 %cleanMeUP gets executed if controll-c is pressed 
 
 global error_vector;
+global warp_param_vector;
+global ground_truth;
+error_vector=error_vector(error_vector~=-100);
+warp_param_vector=warp_param_vector(:,warp_param_vector(1,:)~=-100);
+ground_truth=ones(size(warp_param_vector,2),4)*[ground_truth(1),0,0,0;0,ground_truth(2),0,0;0,0,ground_truth(3),0;0,0,0,ground_truth(4)]
+ground_truth=transpose(ground_truth)
 figure
-error_vector=error_vector(error_vector~=-1)
 plot(error_vector);
-
+figure
+hold all
+plot(warp_param_vector(1,:));
+plot(warp_param_vector(2,:));
+plot(warp_param_vector(3,:)*100);
+plot(warp_param_vector(4,:)*100);
+plot(ground_truth(1,:));
+plot(ground_truth(2,:));
+plot(ground_truth(3,:)*100);
+plot(ground_truth(4,:)*100);
 end
 
 
