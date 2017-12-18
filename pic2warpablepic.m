@@ -14,5 +14,11 @@ for y=1:size(I,1)
     counter=counter+1;
    end
 end
+
+%cameramatrix setting the middle of the picture to zero
+mean_x=(min(warpablepic(1,:))+max(warpablepic(1,:)))/2;
+mean_y=(min(warpablepic(2,:))+max(warpablepic(2,:)))/2;
+warpablepic(1,:)=warpablepic(1,:)-mean_x;
+warpablepic(2,:)=warpablepic(2,:)-mean_y;
 end
 

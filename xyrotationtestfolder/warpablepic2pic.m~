@@ -1,0 +1,23 @@
+function [pic] = warpablepic2pic( warpablepic,cameramatrix,xmax,ymax )
+%warpablepic2pic converts a pic which can be warped by matrix
+%multiplication to a human readable picture
+%   Detailed explanation goes here
+
+warpablepic=cameramatrix\warpablepic;
+
+%it is important that the warped image gets backtransformed first
+xmax=max([warpablepic(1,1:end),xmax]); %gets the size of the new image
+ymax=max([warpablepic(2,1:end),ymax]);
+
+pic=zeros(ymax,xmax,2);
+%prealocates the necessary picture
+
+for i=1:length(warpablepic)
+   pic(warpablepic(2,i),warpablepic(1,i),1)=pic(warpablepic(2,i),warpablepic(1,i),1)+warpablepic(4,i);
+   pic(warpablepic(2,i),warpablepic(1,i),2)=pic(warpablepic(2,i),warpablepic(1,i),2)+1;
+end
+
+
+
+end
+
