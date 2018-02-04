@@ -20,7 +20,5 @@ warpablepic(3,:)=warpablepic(3,:)./warpablepic(3,:); %substitute by 1 to for spe
 output_Image=warpablepic2pic(warpablepic,cameramatrix,100,100);
 
 
-
-
 end
 

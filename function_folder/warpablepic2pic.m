@@ -18,8 +18,8 @@ vq=F(xq,yq);
 %warpablepic(1:2,:)=round(warpablepic(1:2,:)+0.5*ones(2,length(warpablepic)));
 
 %it is important that the warped image gets backtransformed first
+vq(isnan(vq))=0;
 pic=vq;
-
 
 end
 

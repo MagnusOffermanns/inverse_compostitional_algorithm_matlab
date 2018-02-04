@@ -20,23 +20,20 @@ displacement_y=size(Image,1)/4+70;
 displacement_x=size(Image,2)/4+70;
 size_picx=size(Image,2)/6;   
 size_picy=size(Image,1)/6;  
+
+width_snippet=1;%world coordinates from -1 to 1
+height_snippet=1;
+
 offset_y=2;
 offset_x=3;
-width_snippet=1;%world coordinates from -1 to 1
-height_snippet=1
-% D=[50*1/2;-100*1/2]; %y,x
-% A=[-50*1/2;-100*1/2];
-% C=[50*1/2;100*1/2];
-% B=[-50*1/2;100*1/2];
-%D=[2.5;-2.5]
-%A=[-2.5,-2.5]
-%C=[2.5;2.5]
-%B=[-2.5;2.5]
 alpha=2*pi/360*0.5; %0.0175
 scale=-0.01; %minus -> bigger plus -> smaller
+rotation_x=1
+rotation_y=1;
+
 global ground_truth
-ground_truth=-1*[offset_x;offset_y;scale;alpha];
-[T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
+ground_truth=-1*[offset_x;offset_y;scale;alpha;rotation_x;rotation_y];
+[T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 plot2pictures(T,I)
 translation_vector=[I.reference_object_entire.PixelExtentInWorldY*offset_y,... %debug information
     I.reference_object_entire.PixelExtentInWorldX*offset_x]

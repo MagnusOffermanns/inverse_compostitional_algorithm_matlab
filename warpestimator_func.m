@@ -3,7 +3,7 @@ function [ warp_param] = warpestimator_func(T,I)
 %   Detailed explanation goes here
 %profile on;
 
-warp_param=[0,0,0,0]; %[x-translation,y-translation,scale,rotation]
+warp_param=[0,0,0,0]; %[x-translation,y-translation,scale,z rotation,x rotation,y rotation]
 %precalculations
 [Gx,Gy]=gradientcalc(T.Data_snippet);%gradient bedenken 
 gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T); %gradient times jacobian at x=0 %chagned
@@ -13,7 +13,7 @@ hessian=calc_hessian(gradient_times_jacobian);
 %warpablepicI=pic2warpablepic(I); % brings the picture in a state so that 
                                              %a warp can be applied
 
-runtime=300;
+runtime=10;
 global error_vector;
 global warp_param_vector;
 error_vector = -100*ones(1,runtime);
@@ -41,8 +41,9 @@ disp(update);
 end
 %updates the warp parameter
 
-figure
-plot(error_vector);
+%figure
+%subplot(1,2,1)
+%plot(error_vector);
 
 %profile viewer
 
@@ -57,11 +58,13 @@ global warp_param_vector;
 global ground_truth;
 error_vector=error_vector(error_vector~=-100);
 warp_param_vector=warp_param_vector(:,warp_param_vector(1,:)~=-100);
-ground_truth=ones(size(warp_param_vector,2),4)*[ground_truth(1),0,0,0;0,ground_truth(2),0,0;0,0,ground_truth(3),0;0,0,0,ground_truth(4)]
-ground_truth=transpose(ground_truth)
+ground_truth=ones(size(warp_param_vector,2),4)*[ground_truth(1),0,0,0;0,ground_truth(2),0,0;0,0,ground_truth(3),0;0,0,0,ground_truth(4)];
+ground_truth=transpose(ground_truth);
 figure
+subplot(1,2,2)
 plot(error_vector);
-figure
+
+subplot(1,2,1)
 hold all
 plot(warp_param_vector(1,:));
 plot(warp_param_vector(2,:));

@@ -25,17 +25,13 @@ Data=imwarp(image,to_origin_transform,'cubic','OutputView',reference_object);
 %create the Picture object
 T=operated_picture(Data,height_snippet,width_snippet);
 
-crop_transform=[1 0 0; ...
-                0 1 0;
-                -displacement_x -displacement_y 1];
 
-cropped_image=imwarp(image,affine2d(crop_transform),'cubic','OutputView',imref2d(size(image)));
-imshow(cropped_image);
+
 
 %displacement matrix to (0/0)            
-%  from_origin_transform=[1 0 0; ...
-%                         0 1 0;
-%                        -displacement_x-mean(T.reference_object_entire.XIntrinsicLimits) -displacement_y-mean(T.reference_object_entire.YIntrinsicLimits) 1];
+ from_origin_transform=[1 0 0; ...
+                        0 1 0;
+                       -displacement_x-mean(T.reference_object_entire.XIntrinsicLimits) -displacement_y-mean(T.reference_object_entire.YIntrinsicLimits) 1];
 
 % %roation matrix
 %  r_transform =[cos(alpha) -sin(alpha) 0;...
@@ -47,9 +43,8 @@ imshow(cropped_image);
 %             0 1/(1+scale) 0 ;...
 %             0 0 1];
 
-srxyrot_warped_image=warp_rotxy(cropped_image,rotation_x,rotation_y); %todo crop the picture to original size        
-figure
-imshow(srxyrot_warped_image);
+srxyrot_warped_image=warp_rotxy(image,rotation_x,rotation_y); %todo crop the picture to original size        
+        
 %translation matrix            
 %  t_transform=[1 0 0; ...
 %               0 1 0;
