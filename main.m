@@ -7,36 +7,53 @@ disp('ich bin die main');
 %Image=test_data;
 tic
 %Image=rgb2gray(imread('test_pic4.jpg'));%=zeros(10)%rgb2gray(imread('test_pic4.jpg'));
- Image=zeros(13,13);
- Image(ceil(size(Image,1)/2),ceil(size(Image,2)/2))=255;
- %Image(floor(size(Image,1)/2)+1,floor(size(Image,2)/2))=255;
- %Image(floor(size(Image,1)/2),floor(size(Image,2)/2+1))=255;
- %Image(floor(size(Image,1)/2+1),floor(size(Image,2)/2+1))=255;
+%Image=zeros(13,13);
+%Image(ceil(size(Image,1)/2),ceil(size(Image,2)/2))=255;
+%Image(floor(size(Image,1)/2)+1,floor(size(Image,2)/2))=255;
+%Image(floor(size(Image,1)/2),floor(size(Image,2)/2+1))=255;
+%Image(floor(size(Image,1)/2+1),floor(size(Image,2)/2+1))=255;
+%if normal test picture
 Image=rgb2gray(imread('test_pic4.jpg'));
 Image=double(Image)/255;
-%Image=create_cross(size(Image,1),size(Image,2));
- 
 displacement_y=size(Image,1)/4+70; 
 displacement_x=size(Image,2)/4+70;
 size_picx=size(Image,2)/6;   
 size_picy=size(Image,1)/6;  
+Image=markpoint(Image,displacement_x+size_picx/2,displacement_y+size_picy/2);
+
+
+%imshow(Image)
+% Image=create_cross(60,60);
+% displacement_x=4;
+% displacement_y=4;
+% size_picx=50;
+% size_picy=50;
+
+
+%Image(1:20,1:20) = 1;
+% Image(size(Image,1),1) = 1;
+% Image(1,size(Image,2)) = 1;
+% Image(size(Image,1),size(Image,2)) = 1;
+%Image=create_cross(size(Image,1),size(Image,2));
+ 
+
 
 width_snippet=1;%world coordinates from -1 to 1
 height_snippet=1;
 
-offset_y=2;
-offset_x=3;
+offset_y=4;
+offset_x=2;
 alpha=2*pi/360*0.5; %0.0175
 scale=-0.01; %minus -> bigger plus -> smaller
-rotation_x=1
-rotation_y=1;
+rotation_x=0.1%0.1;
+rotation_y=-0.1%0.1;
 
 global ground_truth
 ground_truth=-1*[offset_x;offset_y;scale;alpha;rotation_x;rotation_y];
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 plot2pictures(T,I)
 translation_vector=[I.reference_object_entire.PixelExtentInWorldY*offset_y,... %debug information
-    I.reference_object_entire.PixelExtentInWorldX*offset_x]
+I.reference_object_entire.PixelExtentInWorldX*offset_x]
 warp_parameters=warpestimator_func(T,I);
 
 

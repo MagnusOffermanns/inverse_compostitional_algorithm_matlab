@@ -3,9 +3,9 @@ function [ warp_param] = warpestimator_func(T,I)
 %   Detailed explanation goes here
 %profile on;
 
-warp_param=[0,0,0,0]; %[x-translation,y-translation,scale,z rotation,x rotation,y rotation]
+warp_param=[0,0,0,0,0,0]; %[x-translation,y-translation,scale,z rotation,x rotation,y rotation]
 %precalculations
-[Gx,Gy]=gradientcalc(T.Data_snippet);%gradient bedenken 
+[Gx,Gy]=gradientcalc(T.Data_snippet);%gradient berechnen 
 gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T); %gradient times jacobian at x=0 %chagned
 hessian=calc_hessian(gradient_times_jacobian); 
 

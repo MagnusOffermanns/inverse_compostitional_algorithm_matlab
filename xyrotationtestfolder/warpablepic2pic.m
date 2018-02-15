@@ -4,8 +4,8 @@ function [pic] = warpablepic2pic( warpablepic,cameramatrix,paddingy,paddingx)
 %   Detailed explanation goes here
 
 warpablepic(1:3,:)=inv(cameramatrix)*warpablepic(1:3,:);
-warpablepic(1:1,:)=warpablepic(1:1,:)+paddingx/2*ones(1,length(warpablepic));
-warpablepic(2:2,:)=warpablepic(2:2,:)+paddingy/2*ones(1,length(warpablepic));
+warpablepic(1:1,:)=warpablepic(1:1,:)+(paddingx/2*ones(1,length(warpablepic)));
+warpablepic(2:2,:)=warpablepic(2:2,:)+(paddingy/2*ones(1,length(warpablepic)));
 %interpolation
 %[ndgridx,ndgridy,ndgridz]=warpablepic2ngrid(warpablepic,cameramatrix);
 %ndgridx=ndgridx+(paddingx/2)*ones(size(ndgridy));

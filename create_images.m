@@ -1,67 +1,84 @@
 function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y)
-%creates the 
+%create_images creates the two images which are later used to run the inverse
+%conpositional algorithm
 %   Detailed explanation goes here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%T%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %generate the original Template T 
 reference_object=imref2d([size_picy size_picx]); %generates the reference object
 
 %matrix that shifts the middle of the wanted image in the coordinate (0/0)
-%-> dispacement_x+half of the picture witdth and dispalcement_y+half of the
-%height are now (0/0)
+%-> dispacement_x+size_picx/2 and dispalcement_y+size_picy/2 are now (0/0)
 to_origin_transform=[1 0 0;...
                      0 1 0;...
                      -displacement_x-mean(reference_object.XIntrinsicLimits) -displacement_y-mean(reference_object.YIntrinsicLimits) 1];
 
-%creates the affine 2d object for later warp
+%creates the affine 2d object for later warp from to_origin transform
 to_origin_transform=affine2d(to_origin_transform);
 
-% creates a reference object which is fitting for the image  
+% shifts the X- and Y- Worldlimits of the reference_object to (0/0) to cut
+% a picture with size_picx and size_picy out of the center of the picture
 reference_object.XWorldLimits=reference_object.XWorldLimits-mean(reference_object.XIntrinsicLimits);
 reference_object.YWorldLimits=reference_object.YWorldLimits-mean(reference_object.YIntrinsicLimits);
         
-%warps and gives just the pixels out which are in the reference
-%objects reference frame
+%apply the origin transform and cut it out with the reference object
 Data=imwarp(image,to_origin_transform,'cubic','OutputView',reference_object);
             
 %create the Picture object
 T=operated_picture(Data,height_snippet,width_snippet);
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%I%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Create the I object
+%create a reference object which is used to keep the frame stable when we
+%move the pixels around
+help_reference_object=imref2d(size(image)); 
+
+%move center of the future cut out picture to the center of the frame 
 crop_transform=[1 0 0; ...
                 0 1 0;
-                -displacement_x -displacement_y 1];
+                mean(help_reference_object.XIntrinsicLimits)+(-displacement_x-size_picx/2) mean(help_reference_object.YIntrinsicLimits)+(-displacement_y-size_picy/2) 1];
+%apply the crop transform and get the pixels which are still in the
+%frame of help_reference_object
+cropped_image=imwarp(image,affine2d(crop_transform),'cubic','OutputView',help_reference_object);
 
-cropped_image=imwarp(image,affine2d(crop_transform),'cubic','OutputView',imref2d(size(image)));
-imshow(cropped_image);
 
-%displacement matrix to (0/0)            
-%  from_origin_transform=[1 0 0; ...
-%                         0 1 0;
-%                        -displacement_x-mean(T.reference_object_entire.XIntrinsicLimits) -displacement_y-mean(T.reference_object_entire.YIntrinsicLimits) 1];
+%warp the picture in rotation in x,y,z and translation in z
+srxyrot_warped_image=warp_rotxy(cropped_image,offset_x,offset_y,alpha,scale,rotation_x,rotation_y); %todo crop the picture to original size        
 
-% %roation matrix
-%  r_transform =[cos(alpha) -sin(alpha) 0;...
-%      sin(alpha) cos(alpha) 0;...
-%      0 0 1]; %rotation around the center
-% 
-% %scale matrix
-% s_transform=[1/(1+scale) 0 0;...
-%             0 1/(1+scale) 0 ;...
-%             0 0 1];
+%imshow(srxyrot_warped_image)
 
-srxyrot_warped_image=warp_rotxy(cropped_image,rotation_x,rotation_y); %todo crop the picture to original size        
-figure
-imshow(srxyrot_warped_image);
+%get a new referenceobject from the warped picture (warp_rotxy changes the image size)
+help_reference_object=imref2d(size(srxyrot_warped_image));
+
+% from_origin_transform=[1 0 0; ...
+%                        0 1 0;
+%                       -mean(help_reference_object.XIntrinsicLimits) -mean(help_reference_object.YIntrinsicLimits) 1];
+
+
+%defining the transformation matrix to translate the picture since
+%warp_rotxy does not translate
 %translation matrix            
-%  t_transform=[1 0 0; ...
-%               0 1 0;
-%               -offset_x -offset_y 1;];
-%             
-
-% create affine 2d object for the warp
-%transform =affine2d(from_origin_transform*r_transform*s_transform*t_transform);%*from_origin_transform);
-transform = affine2d(eye(3));
-[warped_image]=imwarp(srxyrot_warped_image,transform,'cubic','Outputview',reference_object);
+ t_transform=[1 0 0; ...
+              0 1 0;
+              -offset_x -offset_y 1;];
+ 
+ % create affine 2d object for the warp
+ transform = affine2d(t_transform);            
 
 
+%move the zero point of the reference object of the newly warped picture to (0/0) 
+help_reference_object.XWorldLimits=help_reference_object.XWorldLimits-mean(help_reference_object.XIntrinsicLimits);
+help_reference_object.YWorldLimits=help_reference_object.YWorldLimits-mean(help_reference_object.YIntrinsicLimits);
+
+%warp the picture 
+[warped_image,~]=imwarp(srxyrot_warped_image,help_reference_object,transform,'cubic','Outputview',reference_object);
+
+%figure
+%imshow(warped_image)
+
+%generate the I object
 I=operated_picture(warped_image,height_snippet,width_snippet);
 
 end
