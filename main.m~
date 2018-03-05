@@ -63,17 +63,17 @@ height_snippet=1;
 global jacobianchooser
 global ground_truth
 
-offset_x=-1;
-offset_y=2;
-scale=(-1+(0.99)); %-1 to calculate the actual scale since we scale by 1+scale %minus -> bigger plus -> smaller
+offset_x=-2;
+offset_y=-1;
+scale=0;(-1+(1.01)); %-1 to calculate the actual scale since we scale by 1+scale %minus -> bigger plus -> smaller
 rotation_x=0;-2*pi/360*10; %0.0087
 rotation_y=0;%-2*pi/360*0; %0.0087
-alpha=-2*pi/360*0.5; %0.0087
+alpha=0;-2*pi/360*0.5; %0.0087
 
 
-jacobianchooser=bi2de([1 1 1 0 0 1])
+jacobianchooser=bi2de([1 1 0 0 0 0])
 
-ground_truth=[offset_x;offset_y;scale;rotation_x;rotation_y;alpha];
+ground_truth=-1*[offset_x;offset_y;scale+1;alpha;rotation_x;rotation_y];
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 plot2pictures(T,I,'data')
 translation_vector=[I.reference_object_entire.PixelExtentInWorldY*offset_y,... %debug information

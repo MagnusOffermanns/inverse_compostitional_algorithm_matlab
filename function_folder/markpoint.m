@@ -4,7 +4,7 @@ function [ output_Image ] = markpoint(Image,x,y)
 dotsize=3;
 for xx=1:size(Image,2)
    for yy=1:size(Image,1)
-       if abs(xx-x)+abs(yy-y)<dotsize
+       if abs((xx-0.5)-x)+abs((yy-0.5)-y)<dotsize
        Image(yy,xx)=1;
        end
    end
