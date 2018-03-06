@@ -15,16 +15,14 @@ warpablepicobj=warpablepic(Image);
  rz_transform =[cos(warp_params(6)) -sin(warp_params(6)) 0;...
      sin(warp_params(6)) cos(warp_params(6)) 0;...
      0 0 1]; %rotation around the center
-
- %rotation y         
-ry_transform=[cos(warp_params(5)) 0 sin(warp_params(5));
-              0 1 0;
-              -sin(warp_params(5)) 0 cos(warp_params(5))];
- 
 %roation x
 rx_transform=[1 0 0;
               0 cos(warp_params(4)) -sin(warp_params(4));
               0 sin(warp_params(4)) cos(warp_params(4))];
+%rotation y         
+ry_transform=[cos(warp_params(5)) 0 sin(warp_params(5));
+              0 1 0;
+              -sin(warp_params(5)) 0 cos(warp_params(5))];
 %scale matrix
 s_transform=[(1+warp_params(3)) 0 0;...
             0 (1+warp_params(3)) 0 ;...

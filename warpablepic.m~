@@ -36,8 +36,8 @@ classdef warpablepic
             
             %get the minimum borders of the picture -> if picture got
             %smaller than -1 pad dark pixels
-            minstartwert=(obj.cameramatrix\[-1;-1;1]);%+0.5; %gets the minimum size of the picture +0.5 to correct sampling point
-            minendwert=(obj.cameramatrix\[1;1;1]);%-0.5;    
+            minstartwert=(obj.cameramatrix\[-1;-1;1])+0.5; %gets the minimum size of the picture +0.5 to correct sampling point
+            minendwert=(obj.cameramatrix\[1;1;1])-0.5;    
             
             %gets the offset out of the picture data. Afterwards the pixels start at
             %0. afterwards 0.5 is added to bring the reference points in the middle of

@@ -16,7 +16,7 @@ tic
 %Image(floor(size(Image,1)/2),floor(size(Image,2)/2+1))=255;
 %Image(floor(size(Image,1)/2+1),floor(size(Image,2)/2+1))=255;
 %if normal test picture
-test_or_real='real';
+test_or_real='rect';
 
 if isequal(test_or_real,'real')
 Image=rgb2gray(imread('test_pic4.jpg'));
@@ -35,15 +35,17 @@ elseif isequal(test_or_real,'test')
  displacement_y=size_cross/2-(size_picy/2);
  imshow(Image)
 elseif isequal(test_or_real,'rect')
-size_rect=1000
-size_picx=200;
-size_picy=200; 
+multiplier=50
+    
+size_rect=multiplier*6
+size_picx=multiplier*3;
+size_picy=multiplier*3; 
  
  displacement_x=size_rect/2-(size_picx/2);
  displacement_y=size_rect/2-(size_picy/2);
 
- Image=paint_rect(size_rect,size_rect,0,450,450,100,100,1,1);
- Image=paint_rect(1000,1000,Image,475,475,50,50,0,0);
+ Image=paint_rect(size_rect,size_rect,0,multiplier*1,multiplier*1,multiplier*4,multiplier*4,1,1);
+ Image=paint_rect(size_rect,size_rect,Image,multiplier*2,multiplier*2,multiplier*2,multiplier*2,0,0);
  
  imshow(Image)
 elseif isequal(test_or_real,'dot')
@@ -73,12 +75,12 @@ global interpolation_degree;
 
 interpolation_degree='linear';
 
-offset_x=-1;
-offset_y=2;
-scale=(-1+(0.99)); %-1 to calculate the actual scale since we scale by 1+scale %minus -> bigger plus -> smaller
-rotation_x=0;-2*pi/360*10; %0.0087
+offset_x=0;-1;
+offset_y=0;2;
+scale=0;(-1+(1.01)); %-1 to calculate the actual scale since we scale by 1+scale %minus -> bigger plus -> smaller
+rotation_x=0;-2*pi/360*20; %0.0087
 rotation_y=0;%-2*pi/360*0; %0.0087
-alpha=-2*pi/360*0.5; %0.0087
+alpha=0;-2*pi/360*0.5; %0.0087
 
 
 jacobianchooser=bi2de([1 1 1 0 0 1])
