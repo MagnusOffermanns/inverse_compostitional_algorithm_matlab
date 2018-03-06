@@ -3,6 +3,8 @@ function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displa
 %conpositional algorithm
 %   Detailed explanation goes here
 
+global interpolation_degree
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%T%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %generate the original Template T 
 reference_object=imref2d([size_picy size_picx],[-1 1], [-1 1]); %generates the reference object
@@ -22,10 +24,10 @@ to_origin_transform=affine2d(to_origin_transform);
 %reference_object.YWorldLimits=reference_object.YWorldLimits-mean(reference_object.YIntrinsicLimits);
         
 %apply the origin transform and cut it out with the reference object
-Data=imwarp(image,help_reference_object,to_origin_transform,'cubic','OutputView',reference_object);
+Data=imwarp(image,help_reference_object,to_origin_transform,interpolation_degree,'OutputView',reference_object);
             
 %create the Picture object
-T=operated_picture(Data,height_snippet,width_snippet);
+T=operated_picture(Data,height_snippet,width_snippet,interpolation_degree);
 
 
 
@@ -50,7 +52,7 @@ crop_transform=[1 0 0; ...
  %apply the crop transform and get the pixels which are still in the
 %frame of help_reference_object
 
-cropped_image=imwarp(image,help_reference_object,affine2d(crop_transform),'cubic','OutputView',help_reference_object);
+cropped_image=imwarp(image,help_reference_object,affine2d(crop_transform),interpolation_degree,'OutputView',help_reference_object);
 
 
 %warp the picture in rotation in x,y,z and translation in z
@@ -84,12 +86,12 @@ help_reference_object=imref2d(size(srxyrot_warped_image),reference_object.PixelE
 
 
 %warp the picture 
-[warped_image,~]=imwarp(srxyrot_warped_image,help_reference_object,transform,'cubic','Outputview',reference_object);
+[warped_image,~]=imwarp(srxyrot_warped_image,help_reference_object,transform,interpolation_degree,'Outputview',reference_object);
 
 %figure
 %imshow(warped_image)
 
 %generate the I object
-I=operated_picture(warped_image,height_snippet,width_snippet);
+I=operated_picture(warped_image,height_snippet,width_snippet,interpolation_degree);
 
 end

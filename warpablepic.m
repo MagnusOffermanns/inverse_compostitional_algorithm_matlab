@@ -75,6 +75,7 @@ classdef warpablepic
             %stuetzpunkte definieren
             F = scatteredInterpolant(temp_warpablepic(2,:).',temp_warpablepic(1,:).',temp_warpablepic(4,:).');
             F.ExtrapolationMethod='none';
+            F.Method='natural';
 
             %[xq,yq]=ndgrid(0:1:cameramatrix(1,1)^-1*2+paddingx,0:1:cameramatrix(2,2)^-1*2+paddingy);
             %max(temp_warpablepic,2)(1)

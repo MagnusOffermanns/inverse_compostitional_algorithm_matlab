@@ -27,10 +27,10 @@ size_picx=size(Image,2)/6;
 size_picy=size(Image,1)/6;  
 Image=markpoint(Image,displacement_x+size_picx/2,displacement_y+size_picy/2); %muss verbessert werden (unter pixel genauigkeit)
 elseif isequal(test_or_real,'test')
- size_cross=30;
+ size_cross=16;
  Image=create_cross(size_cross,size_cross);
- size_picx=20;
- size_picy=20;
+ size_picx=8;
+ size_picy=8;
  displacement_x=size_cross/2-(size_picx/2);
  displacement_y=size_cross/2-(size_picy/2);
  imshow(Image)
@@ -46,7 +46,14 @@ size_picy=200;
  Image=paint_rect(1000,1000,Image,475,475,50,50,0,0);
  
  imshow(Image)
- 
+elseif isequal(test_or_real,'dot')
+size_dot=16;
+Image=create_dot(size_dot);       
+ size_picx=8;
+ size_picy=8;
+ displacement_x=size_dot/2-(size_picx/2);
+ displacement_y=size_dot/2-(size_picy/2);
+ imshow(Image,imref2d(size(Image),[-1 1],[-1 1]));   
 end
 
 %Image(1:20,1:20) = 1;
@@ -62,6 +69,9 @@ height_snippet=1;
 
 global jacobianchooser
 global ground_truth
+global interpolation_degree;
+
+interpolation_degree='linear';
 
 offset_x=-1;
 offset_y=2;

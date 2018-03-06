@@ -9,13 +9,15 @@ classdef operated_picture
         Data_snippet
         reference_object_snippet
         stepsize_multiplier
+        interpolation_degree
         
     end
     
     methods
-        function obj=operated_picture(Image,height_snippet,width_snippet)
-        
+        function obj=operated_picture(Image,height_snippet,width_snippet,interpolation_degree)
+          
         obj.Data=Image;
+        obj.interpolation_degree=interpolation_degree;
         obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
         
         [D_X,D_Y]=obj.reference_object_entire.worldToSubscript(-height_snippet/2,-width_snippet/2);  %x,y
@@ -93,7 +95,7 @@ classdef operated_picture
              
                              transform=affine2d(to_origin_transform*r_transform*from_origin_transform);
             
-                             [obj.Data]=imwarp(obj.Data,transform,'cubic');
+                             [obj.Data]=imwarp(obj.Data,transform,obj.interpolation_degree);
                              obj=obj.update_reference_object_rot;
                              
                              
@@ -129,7 +131,7 @@ classdef operated_picture
                                 mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
                             
           transform=affine2d(to_origin_transform*s_transform*from_origin_transform);
-                             [obj.Data]=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic');
+                             [obj.Data]=imwarp(obj.Data,obj.reference_object_entire,transform,obj.interpolation_degree);
                             obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
                              
                           
@@ -153,7 +155,7 @@ classdef operated_picture
                                 0 1 0;...
                                 mean(obj.reference_object_entire.XWorldLimits) mean(obj.reference_object_entire.YWorldLimits) 1];
                             transform=affine2d(to_origin_transform*transform*from_origin_transform);
-           obj.Data_snippet=imwarp(obj.Data,obj.reference_object_entire,transform,'cubic','OutputView',obj.reference_object_snippet);
+           obj.Data_snippet=imwarp(obj.Data,obj.reference_object_entire,transform,obj.interpolation_degree,'OutputView',obj.reference_object_snippet);
         end
         
         
