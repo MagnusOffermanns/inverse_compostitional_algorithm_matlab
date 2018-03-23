@@ -56,10 +56,15 @@ function [] = cleanMeUp()
 global error_vector;
 global warp_param_vector;
 global ground_truth;
+global stepsize_multiplier;
+
+
 error_vector=error_vector(error_vector~=-100);
 warp_param_vector=warp_param_vector(:,warp_param_vector(1,:)~=-100);
  ground_truth=ones(size(warp_param_vector,2),6)*[ground_truth(1),0,0,0,0,0;0,ground_truth(2),0,0,0,0;0,0,ground_truth(3),0,0,0;0,0,0,ground_truth(4),0,0;0,0,0,0,ground_truth(5),0;0,0,0,0,0,ground_truth(6)];
 ground_truth=transpose(ground_truth);
+%correction of the warp params by the stepsize multiplier
+warp_param_vector=bsxfun(@times, warp_param_vector, stepsize_multiplier');
 scrsz = get(groot,'ScreenSize');
 figure('Position',[scrsz(3)/2 scrsz(4)/2 scrsz(3)/2 scrsz(4)/2])
 subplot(1,2,2)
@@ -76,8 +81,8 @@ plot(warp_param_vector(6,:)*100,'color','m');
 plot(-ground_truth(1,:),'color','r');
 plot(-ground_truth(2,:),'color','c');
 plot(-ground_truth(3,:)*100,'color','g');
-plot(ground_truth(4,:)*100,'color','k');
-plot(ground_truth(5,:)*100,'color','b');
+plot(-ground_truth(4,:)*100,'color','k');
+plot(-ground_truth(5,:)*100,'color','b');
 plot(-ground_truth(6,:)*100,'color','m');
 legend('xtrans', 'ytrans' ,'ztrans','rotx','roty','rotz');
 end

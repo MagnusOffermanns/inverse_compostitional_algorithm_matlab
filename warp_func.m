@@ -6,7 +6,7 @@ I_temp=I;
 %function for translation in z and rotation in x,z,z
 I_temp=I_temp.warptzrotxyz(warp_param);
 %translation function
-I_temp=I_temp.translate_op(warp_param);
+%I_temp=I_temp.translate_op(warp_param);
 I_temp=I_temp.get_Data_snippet(warp_param);
 
 

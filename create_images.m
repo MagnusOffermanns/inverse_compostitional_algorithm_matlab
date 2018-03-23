@@ -56,18 +56,19 @@ cropped_image=imwarp(image,help_reference_object,affine2d(crop_transform),interp
 
 
 %warp the picture in rotation in x,y,z and translation in z
-srxyrot_warped_image=warp_rotxy(cropped_image,[offset_x,offset_y,scale,rotation_x,rotation_y,alpha]);       
+warped_image=warp_rotxy(cropped_image,T.Data,[offset_x,offset_y,scale,rotation_x,rotation_y,alpha]);       
 %srxyrot_warped_image=cropped_image;
 %imshow(srxyrot_warped_image)
 
 %get a new referenceobject from the warped picture (warp_rotxy changes the image size)
-help_reference_object=imref2d(size(srxyrot_warped_image),reference_object.PixelExtentInWorldX,reference_object.PixelExtentInWorldY);
+%!help_reference_object=imref2d(size(srxyrot_warped_image),reference_object.PixelExtentInWorldX,reference_object.PixelExtentInWorldY);
 %move the zero point of the reference object of the newly warped picture to (0/0) 
- help_reference_object.XWorldLimits=help_reference_object.XWorldLimits-mean(help_reference_object.XIntrinsicLimits*help_reference_object.PixelExtentInWorldX);
- help_reference_object.YWorldLimits=help_reference_object.YWorldLimits-mean(help_reference_object.YIntrinsicLimits*help_reference_object.PixelExtentInWorldY);
+%! help_reference_object.XWorldLimits=help_reference_object.XWorldLimits-mean(help_reference_object.XIntrinsicLimits*help_reference_object.PixelExtentInWorldX);
+%! help_reference_object.YWorldLimits=help_reference_object.YWorldLimits-mean(help_reference_object.YIntrinsicLimits*help_reference_object.PixelExtentInWorldY);
 
-
-
+ %translation   
+%!help_reference_object.XWorldLimits=help_reference_object.XWorldLimits-offset_x*help_reference_object.PixelExtentInWorldX;
+%!help_reference_object.YWorldLimits=help_reference_object.YWorldLimits-offset_y*help_reference_object.PixelExtentInWorldY;
 % from_origin_transform=[1 0 0; ...
 %                        0 1 0;
 %                       -mean(help_reference_object.XIntrinsicLimits) -mean(help_reference_object.YIntrinsicLimits) 1];
@@ -76,17 +77,19 @@ help_reference_object=imref2d(size(srxyrot_warped_image),reference_object.PixelE
 %defining the transformation matrix to translate the picture since
 %warp_rotxy does not translate
 %translation matrix            
- t_transform=[1 0 0; ...
-              0 1 0;
-              -offset_x*help_reference_object.PixelExtentInWorldX -(offset_y*help_reference_object.PixelExtentInWorldY) 1];
- 
+%  t_transform=[1 0 0; ...
+%               0 1 0;
+%               -offset_x*help_reference_object.PixelExtentInWorldX -(offset_y*help_reference_object.PixelExtentInWorldY) 1];
+%  
+
+%1t_transform=eye(3)
  % create affine 2d object for the warp
- transform = affine2d(t_transform);            
+%1 transform = affine2d(t_transform);            
 
 
 
 %warp the picture 
-[warped_image,~]=imwarp(srxyrot_warped_image,help_reference_object,transform,interpolation_degree,'Outputview',reference_object);
+%1[warped_image,~]=imwarp(srxyrot_warped_image,help_reference_object,transform,interpolation_degree,'Outputview',reference_object);
 
 %figure
 %imshow(warped_image)

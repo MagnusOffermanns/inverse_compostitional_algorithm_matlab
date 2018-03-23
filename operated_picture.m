@@ -26,22 +26,19 @@ classdef operated_picture
         
         obj.Data_snippet=obj.Data(D_X:A_X-1,D_Y:C_Y-1);
         obj.reference_object_snippet=imref2d(size(obj.Data_snippet),[-width_snippet/2 width_snippet/2],[-height_snippet/2 height_snippet/2]);
-        obj.stepsize_multiplier=[obj.reference_object_snippet.PixelExtentInWorldX,obj.reference_object_snippet.PixelExtentInWorldY,1,1,1,1] %step multiplier to alter stepsize and to get more accurate to the minimum
-                
+        obj.stepsize_multiplier=[1,1,1,1,1,1]; %step multiplier to alter stepsize and to get more accurate to the minimum
+        %im final build eliminieren
+        global stepsize_multiplier
+        stepsize_multiplier=obj.stepsize_multiplier;        
         
         
         end
         
         function obj=warptzrotxyz(obj,warp_param)
-           %[xtrans,ytrans,scale,rotz,rotx,roty]
-         %  warp_param=warp_param.*obj.stepsize_multiplier;
+           %[xtrans,ytrans,scale,rotx,roty,rotz]
+           warp_param=warp_param.*obj.stepsize_multiplier;
            
-          
-
-            %convert the 2x2 picture into a 4xnumber of pixels vector (x coord,y coord,z coord,pixel intensity)
-            warpablepicobj=warpablepic(obj.Data);
-
-            %generate matrixes to later transform
+           %generate matrixes to later transform
             %roation matrix z
              rz_transform =[cos(warp_param(6)) -sin(warp_param(6)) 0;...
                             sin(warp_param(6)) cos(warp_param(6)) 0;...
@@ -59,19 +56,74 @@ classdef operated_picture
                             0 (1+warp_param(3)) 0 ;...
                             0 0 1];
 
+            
+            %convert the 2x2 picture into a 4xnumber of pixels vector (x coord,y coord,z coord,pixel intensity)
+            warpablepicobj=warpablepic(obj.Data,obj.Data);
+            
+            %correction of the translation inflicted by the rotation by x
+            %and y rot
+            %xyrot_translationvector=rx_transform*ry_transform*[0;0;1];
+            %xyrot_translationvector=xyrot_translationvector./xyrot_translationvector(3)
+            %warpablepicobj.data=frame_creator(warpablepicobj.data,xyrot_translationvector)
+            
+            
+
+            
         
             %apply the four transforms first rotation (r_transform) then scale (s_transform) then rotation in x (rotx) and
             %then rotation in y roty
-            warpablepicobj.data(1:3,:)=rz_transform*rx_transform*ry_transform*s_transform*warpablepicobj.data(1:3,:);
-            %warpablepicobj.data(1:3,:)=roty(warp_param(6))*rotx(warp_param(5))*r_transform*s_transform*warpablepicobj.data(1:3,:);
-            %project on groundplane
+            warpablepicobj.data(1:3,:)=rz_transform*ry_transform*rx_transform*warpablepicobj.data(1:3,:);
+            
+            %translation
+            translationvector=warpablepicobj.cameramatrix*[warp_param(1);warp_param(2);0];
+            translationvector(3)=warp_param(3);
+            warpablepicobj.data(1:3,:)=bsxfun(@minus,warpablepicobj.data(1:3,:),translationvector);
+            
+            % scatter(warpablepicobj.data(2,:),warpablepicobj.data(1,:))
+           % axis ij
+           
+            
+            
             warpablepicobj.data(1,:)=warpablepicobj.data(1,:)./warpablepicobj.data(3,:);
             warpablepicobj.data(2,:)=warpablepicobj.data(2,:)./warpablepicobj.data(3,:);
-            warpablepicobj.data(3,:)=1; %substituted by 1 to for speed up
-
-            %converts back from a 4X1 array of pixels to a 2x2 picture
+            warpablepicobj.data(3,:)=1;
+            
+            
+            
+            
+            
+            %xyrot_translationvector=xyrot_translationvector./xyrot_translationvector(3)
+            
+            %warpablepicobj.data=frame_creator(warpablepicobj.data,[0;0;0])
+            
+            
+            
+           
+            %plots the points created by the warp and altered by the frame
+            %creator
+            %scatter(warpablepicobj.data(1,:),warpablepicobj.data(2,:))
+            %axis ij
+            
+            
+            
             obj.Data=warpablepicobj.warpablepic2pic(); %man koennte interpolation points so aendern sodass sie immer von -1 bis 1 interpolieren
             obj=obj.update_reference_object_rot;
+            
+            %translation from the xrot and y rot
+%             xyrot_translationvector=rx_transform*ry_transform*[0;0;1];
+%             xyrot_translationvector=xyrot_translationvector/xyrot_translationvector(3);
+%             xyrot_translationvector=warpablepicobj.cameramatrix*[xyrot_translationvector(1);xyrot_translationvector(2);0];
+%             obj.reference_object_entire.XWorldLimits=obj.reference_object_entire.XWorldLimits-[xyrot_translationvector(1),xyrot_translationvector(1)];
+%             obj.reference_object_entire.YWorldLimits=obj.reference_object_entire.YWorldLimits-[xyrot_translationvector(2),xyrot_translationvector(2)];
+%             
+%             obj.reference_object_snippet.XWorldLimits=obj.reference_object_snippet.XWorldLimits-[xyrot_translationvector(1),xyrot_translationvector(1)];
+%             obj.reference_object_snippet.YWorldLimits=obj.reference_object_snippet.YWorldLimits-[xyrot_translationvector(2),xyrot_translationvector(2)];
+             
+            %translation
+%             translationvector=warpablepicobj.cameramatrix*[warp_param(1);warp_param(2);0];
+%             obj.reference_object_entire.XWorldLimits=obj.reference_object_entire.XWorldLimits-[translationvector(1),translationvector(1)];
+%             obj.reference_object_entire.YWorldLimits=obj.reference_object_entire.YWorldLimits-[translationvector(2),translationvector(2)];
+%             
             %[obj.Data]=imwarp(obj.Data,obj.reference_object_entire,affine2d(eye(3)),'cubic','OutputView',imref2d([1,2],[-1 1],[-1 1]));
             %obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
 
@@ -81,7 +133,8 @@ classdef operated_picture
         
         
         function obj=rotate_op(obj,warp_param)
-        %warp_param=warp_param.*obj.stepsize_multiplier;
+        
+            %warp_param=warp_param.*obj.stepsize_multiplier;
         
             %temp_size=size(obj.Data); %saving of the size of the picture before warp
             
@@ -116,7 +169,7 @@ classdef operated_picture
         end
         
         function obj=scale_op(obj,warp_param)
-             %warp_param=warp_param.*obj.stepsize_multiplier;
+             warp_param=warp_param.*obj.stepsize_multiplier;
              
             to_origin_transform=[1 0 0;...
                                  0 1 0;...
@@ -141,7 +194,7 @@ classdef operated_picture
         
         
         function obj=get_Data_snippet(obj,warp_param)
-            %warp_param=warp_param.*obj.stepsize_multiplier;
+            warp_param=warp_param.*obj.stepsize_multiplier;
             to_origin_transform=[1 0 0;...
                                  0 1 0;...
                                  -mean(obj.reference_object_entire.XWorldLimits) -mean(obj.reference_object_entire.YWorldLimits) 1];
