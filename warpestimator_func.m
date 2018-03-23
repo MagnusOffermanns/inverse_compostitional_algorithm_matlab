@@ -16,6 +16,8 @@ hessian=calc_hessian(gradient_times_jacobian);
 runtime=500;
 global error_vector;
 global warp_param_vector;
+global stepsize_multiplier;
+
 error_vector = -100*ones(1,runtime);
 warp_param_vector=-100*ones(6,runtime);
 
@@ -36,7 +38,8 @@ error_plot_flag=0;
 
 warp_param=warp_param+transpose(delta_p);
 warp_param_vector(:,ii)=transpose(warp_param);
-update=['xtranslation: ',num2str(warp_param(1)),'  y translation: ', num2str(warp_param(2)), '  z translation: ', num2str(warp_param(3)),'  rotation x: ', num2str(warp_param(4)),'  rotation y: ',num2str(warp_param(5)),'  rotation z: ',num2str(warp_param(6)),' iteration: ',num2str(ii)];
+warp_param_vectorprint=warp_param.*stepsize_multiplier;
+update=['xtranslation: ',num2str(warp_param_vectorprint(1)),'  y translation: ', num2str(warp_param_vectorprint(2)), '  z translation: ', num2str(warp_param_vectorprint(3)),'  rotation x: ', num2str(warp_param_vectorprint(4)),'  rotation y: ',num2str(warp_param_vectorprint(5)),'  rotation z: ',num2str(warp_param_vectorprint(6)),' iteration: ',num2str(ii)];
 disp(update);
 end
 %updates the warp parameter

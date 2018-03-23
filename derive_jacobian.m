@@ -4,6 +4,9 @@ syms x y p1 p2 p3 p4 p5 p6 %(x coordinate, y coordinate,x translation, y transla
 
 vector=[x;y;1];
 
+vector=vector-[p1;p2;p3]
+
+
 %rotations
 rotationmatrix=eye(3);
 rotationmatrix=[1,0,0;0,cos(p4),-sin(p4);0,sin(p4),cos(p4)]*rotationmatrix; %rotationmatrix x
@@ -13,9 +16,6 @@ rotationmatrix=[cos(p6),-sin(p6),0;sin(p6),cos(p6),0;0,0,1]*rotationmatrix; %rot
 vector=rotationmatrix*vector;
 
 
-vector=[(1+p3);(1+p3);1].*vector
-
-
 
 
 
@@ -23,8 +23,6 @@ vector=[(1+p3);(1+p3);1].*vector
 % projection back on ground plane
 vector=vector/vector(3);
 
-%translation by x (p1) and y p2
-vector=vector+[p1;p2;0];
 
 %jacobian caculation
 jacobian_vector=jacobian(vector,[p1,p2,p3,p4,p5,p6]);

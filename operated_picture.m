@@ -26,10 +26,10 @@ classdef operated_picture
         
         obj.Data_snippet=obj.Data(D_X:A_X-1,D_Y:C_Y-1);
         obj.reference_object_snippet=imref2d(size(obj.Data_snippet),[-width_snippet/2 width_snippet/2],[-height_snippet/2 height_snippet/2]);
-        obj.stepsize_multiplier=[1,1,1,1,1,1]; %step multiplier to alter stepsize and to get more accurate to the minimum
+        obj.stepsize_multiplier=[1,1,1,75,75,1]; %step multiplier to alter stepsize and to get more accurate to the minimum
         %im final build eliminieren
         global stepsize_multiplier
-        stepsize_multiplier=obj.stepsize_multiplier;        
+        obj.stepsize_multiplier=stepsize_multiplier;        
         
         
         end
@@ -68,16 +68,16 @@ classdef operated_picture
             
             
 
+            %translation
+            translationvector=warpablepicobj.cameramatrix*[warp_param(1);warp_param(2);0];
+            translationvector(3)=warp_param(3);
+            warpablepicobj.data(1:3,:)=bsxfun(@minus,warpablepicobj.data(1:3,:),translationvector);
             
         
             %apply the four transforms first rotation (r_transform) then scale (s_transform) then rotation in x (rotx) and
             %then rotation in y roty
             warpablepicobj.data(1:3,:)=rz_transform*ry_transform*rx_transform*warpablepicobj.data(1:3,:);
             
-            %translation
-            translationvector=warpablepicobj.cameramatrix*[warp_param(1);warp_param(2);0];
-            translationvector(3)=warp_param(3);
-            warpablepicobj.data(1:3,:)=bsxfun(@minus,warpablepicobj.data(1:3,:),translationvector);
             
             % scatter(warpablepicobj.data(2,:),warpablepicobj.data(1,:))
            % axis ij

@@ -55,10 +55,10 @@ classdef warpablepic
             
             %eliminate all values that are smaller and bigger than start
             %and stop value
-            indices=find(abs(temp_warpablepic(1,:))'>=stopvalue(1));
+            indices=find(abs(temp_warpablepic(1,:))'>=stopvalue(1)+1);
             temp_warpablepic(:,indices)=[];
            
-            indices=find(abs(temp_warpablepic(2,:))'>=stopvalue(2));
+            indices=find(abs(temp_warpablepic(2,:))'>=stopvalue(2)+1);
             temp_warpablepic(:,indices)=[];
             
             %get the minimum borders of the picture -> if picture got
