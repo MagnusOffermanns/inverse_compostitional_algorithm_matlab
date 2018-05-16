@@ -109,24 +109,7 @@ classdef operated_picture
             obj.Data=warpablepicobj.warpablepic2pic(); %man koennte interpolation points so aendern sodass sie immer von -1 bis 1 interpolieren
             obj=obj.update_reference_object_rot;
             
-            %translation from the xrot and y rot
-%             xyrot_translationvector=rx_transform*ry_transform*[0;0;1];
-%             xyrot_translationvector=xyrot_translationvector/xyrot_translationvector(3);
-%             xyrot_translationvector=warpablepicobj.cameramatrix*[xyrot_translationvector(1);xyrot_translationvector(2);0];
-%             obj.reference_object_entire.XWorldLimits=obj.reference_object_entire.XWorldLimits-[xyrot_translationvector(1),xyrot_translationvector(1)];
-%             obj.reference_object_entire.YWorldLimits=obj.reference_object_entire.YWorldLimits-[xyrot_translationvector(2),xyrot_translationvector(2)];
-%             
-%             obj.reference_object_snippet.XWorldLimits=obj.reference_object_snippet.XWorldLimits-[xyrot_translationvector(1),xyrot_translationvector(1)];
-%             obj.reference_object_snippet.YWorldLimits=obj.reference_object_snippet.YWorldLimits-[xyrot_translationvector(2),xyrot_translationvector(2)];
-             
-            %translation
-%             translationvector=warpablepicobj.cameramatrix*[warp_param(1);warp_param(2);0];
-%             obj.reference_object_entire.XWorldLimits=obj.reference_object_entire.XWorldLimits-[translationvector(1),translationvector(1)];
-%             obj.reference_object_entire.YWorldLimits=obj.reference_object_entire.YWorldLimits-[translationvector(2),translationvector(2)];
-%             
-            %[obj.Data]=imwarp(obj.Data,obj.reference_object_entire,affine2d(eye(3)),'cubic','OutputView',imref2d([1,2],[-1 1],[-1 1]));
-            %obj.reference_object_entire=imref2d(size(obj.Data),[-1 1],[-1 1]);
-
+         
             
             
         end

@@ -5,7 +5,7 @@ function [ warp_param] = warpestimator_func(T,I)
 
 warp_param=[0,0,0,0,0,0]; %[x-translation,y-translation,scale,z rotation,x rotation,y rotation]
 %precalculations
-[Gx,Gy]=gradientcalc(T.Data_snippet);%gradient berechnen 
+[Gx,Gy]=gradientcalc(T.Data);%gradient berechnen 
 gradient_times_jacobian=calcjacobiantimesgradient(Gx,Gy,T); %gradient times jacobian at x=0 %chagned
 hessian=calc_hessian(gradient_times_jacobian); 
 
@@ -41,6 +41,7 @@ warp_param_vector(:,ii)=transpose(warp_param);
 warp_param_vectorprint=warp_param.*stepsize_multiplier;
 update=['xtranslation: ',num2str(warp_param_vectorprint(1)),'  y translation: ', num2str(warp_param_vectorprint(2)), '  z translation: ', num2str(warp_param_vectorprint(3)),'  rotation x: ', num2str(warp_param_vectorprint(4)),'  rotation y: ',num2str(warp_param_vectorprint(5)),'  rotation z: ',num2str(warp_param_vectorprint(6)),' iteration: ',num2str(ii)];
 disp(update);
+disp(error_num);
 end
 %updates the warp parameter
 

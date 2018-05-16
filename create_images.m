@@ -1,4 +1,4 @@
-function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y)
+function [ T,I ] = create_images(image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y,save_to_drive)
 %create_images creates the two images which are later used to run the inverse
 %conpositional algorithm
 %   Detailed explanation goes here
@@ -96,5 +96,10 @@ warped_image=warp_rotxy(cropped_image,T.Data,[offset_x,offset_y,scale,rotation_x
 
 %generate the I object
 I=operated_picture(warped_image,height_snippet,width_snippet,interpolation_degree);
+
+if strcmp(save_to_drive, 'save')
+    imwrite(T.Data,'T_Data.png')
+    imwrite(I.Data,'I_Data.png')
+end
 
 end

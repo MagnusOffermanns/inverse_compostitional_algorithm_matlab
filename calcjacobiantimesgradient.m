@@ -11,11 +11,12 @@ calculated_jacobian=zeros(2,6);
  %           0,1,sin(0)*xx-cos(0)*yy,-cos(0)*xx-sin(0)*yy];
 
 %gradient=[Gx,Gy];
-gradient_times_jacobian=zeros(T.reference_object_snippet.ImageSize(1)*T.reference_object_snippet.ImageSize(2),size(calculated_jacobian,2));
+gradient_times_jacobian=zeros(T.reference_object_entire.ImageSize(1)*T.reference_object_entire.ImageSize(2),size(calculated_jacobian,2));
 %counter=1;
-
-for yy=1:T.reference_object_snippet.ImageSize(1)
-   for xx=1:T.reference_object_snippet.ImageSize(2)
+%important values should not go from 1 to imagesize but from 0.5 till
+%imagesize-0.5
+for yy=1:T.reference_object_entire.ImageSize(1)
+   for xx=1:T.reference_object_entire.ImageSize(2)
  switch jacobianchooser
      case bi2de([1 1 1 1 1 1])  
         %full jacobian
@@ -71,9 +72,13 @@ for yy=1:T.reference_object_snippet.ImageSize(1)
         error('no valid jacobian choosen')
  end
  
- gradient_times_jacobian((yy-1)*T.reference_object_snippet.ImageSize(2)+xx,:)=[Gx(yy,xx),Gy(yy,xx)]*calculated_jacobian;
+ %gradient_times_jacobian((yy-1)*T.reference_object_snippet.ImageSize(2)+xx,:)=[Gx(yy,xx),Gy(yy,xx)]*calculated_jacobian;
+  gradient_times_jacobian((yy-1)*T.reference_object_entire.ImageSize(2)+xx,:)=[Gx(yy,xx),Gy(yy,xx)]*calculated_jacobian;
+   
    end
 end
+
+ 
 
 
 end

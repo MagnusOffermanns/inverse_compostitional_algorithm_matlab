@@ -20,7 +20,7 @@ tic
 %Image(floor(size(Image,1)/2+1),floor(size(Image,2)/2+1))=255;
 %if normal test picture
 test_or_real='real';
-
+save_to_drive='save';
 if isequal(test_or_real,'real')
 Image=rgb2gray(imread('test_pic4.jpg'));
 Image=double(Image)/255;
@@ -95,7 +95,7 @@ stepsize_multiplier=[1,1,1,75,75,1];
 jacobianchooser=bi2de([1 1 1 1 1 1])
 
 ground_truth=[offset_x;offset_y;scale;rotation_x;rotation_y;alpha];
-[T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
+[T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y,save_to_drive); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)
 plot2pictures(T,I,'data')
 translation_vector=[I.reference_object_entire.PixelExtentInWorldY*offset_y,... %debug information
 I.reference_object_entire.PixelExtentInWorldX*offset_x]
