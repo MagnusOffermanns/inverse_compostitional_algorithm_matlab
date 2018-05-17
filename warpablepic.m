@@ -111,7 +111,7 @@ classdef warpablepic
             
 
             %it is important that the warped image gets backtransformed first
-            vq(isnan(vq))=0;
+            vq(isnan(vq))=1000;
             
     
             normalpicture=vq;

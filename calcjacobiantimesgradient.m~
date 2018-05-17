@@ -19,8 +19,9 @@ for yy=1:T.reference_object_entire.ImageSize(1)
    for xx=1:T.reference_object_entire.ImageSize(2)
 %for yy=(0.5*(2/T.reference_object_entire.ImageSize(2)))-1:1:(((T.reference_object_entire.ImageSize(1)-0.5)*(2/T.reference_object_entire.ImageSize(1)))-1)
 %    for xx=(0.5*(2/T.reference_object_entire.ImageSize(2)))-1:1:(((T.reference_object_entire.ImageSize(2)-0.5)*(2/T.reference_object_entire.ImageSize(2)))-1)
-%x_coord=((xx-0.5)*(2/T.reference_object_entire.ImageSize(2)))-1;
-%y_coord=((yy-0.5)*(2/T.reference_object_entire.ImageSize(1)))-1;
+coord_x=(xx-0.5)
+coord_y=(yy-0.5)
+       
  switch jacobianchooser
      case bi2de([1 1 1 1 1 1])  
         %full jacobian
