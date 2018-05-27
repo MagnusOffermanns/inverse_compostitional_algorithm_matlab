@@ -37,6 +37,7 @@ classdef operated_picture
         function obj=warptzrotxyz(obj,warp_param)
            %[xtrans,ytrans,scale,rotx,roty,rotz]
            warp_param=warp_param.*obj.stepsize_multiplier;
+           warp_param(4:6)=-warp_param(4:6);
            
            %generate matrixes to later transform
             %roation matrix z
@@ -51,11 +52,7 @@ classdef operated_picture
             ry_transform=[cos(warp_param(5)) 0 sin(warp_param(5));
                           0 1 0;
                           -sin(warp_param(5)) 0 cos(warp_param(5))];
-            %scale matrix
-            s_transform=[(1+warp_param(3)) 0 0;...
-                            0 (1+warp_param(3)) 0 ;...
-                            0 0 1];
-
+            
             
             %convert the 2x2 picture into a 4xnumber of pixels vector (x coord,y coord,z coord,pixel intensity)
             warpablepicobj=warpablepic(obj.Data,obj.Data);

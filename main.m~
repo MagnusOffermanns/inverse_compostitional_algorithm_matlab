@@ -87,12 +87,12 @@ interpolation_degree='cubic';
 offset_x=1.8;
 offset_y=1.2;
 scale=(-1+(1.01)); %-1 to calculate the actual scale since we scale by 1+scale %minus -> bigger plus -> smaller
-rotation_x=-2*pi/360*0.5; %0.0087
-rotation_y=2*pi/360*0.7; %0.0087
-alpha=2*pi/360*0.6; %0.0087
+rotation_x=0;%-2*pi/360*0.5; %0.0087
+rotation_y=0;%2*pi/360*0.7; %0.0087
+alpha=0;%2*pi/360*0.5; %0.0087
 
-stepsize_multiplier=[1,1,0.01,0.005,0.005,0.01];
-jacobianchooser=bi2de([1 1 1 1 1 1])
+stepsize_multiplier=[1,1,0.01,75,75,1];
+jacobianchooser=bi2de([1 1 1 1 0 0])
 
 ground_truth=[offset_x;offset_y;scale;rotation_x;rotation_y;alpha];
 [T,I]=create_images(Image,size_picx,size_picy,displacement_x,displacement_y,height_snippet,width_snippet,scale,alpha,offset_x,offset_y,rotation_x,rotation_y,save_to_drive); %create_images(image,size_picx,size_picy,offset_x,offset_y,border,displacement_x,displacement_y)

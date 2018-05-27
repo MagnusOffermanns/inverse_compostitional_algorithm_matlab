@@ -19,39 +19,39 @@ for yy=1:T.reference_object_entire.ImageSize(1)
    for xx=1:T.reference_object_entire.ImageSize(2)
 %for yy=(0.5*(2/T.reference_object_entire.ImageSize(2)))-1:1:(((T.reference_object_entire.ImageSize(1)-0.5)*(2/T.reference_object_entire.ImageSize(1)))-1)
 %    for xx=(0.5*(2/T.reference_object_entire.ImageSize(2)))-1:1:(((T.reference_object_entire.ImageSize(2)-0.5)*(2/T.reference_object_entire.ImageSize(2)))-1)
-%x_coord=((xx-0.5)*(2/T.reference_object_entire.ImageSize(2)))-1;
-%y_coord=((yy-0.5)*(2/T.reference_object_entire.ImageSize(1)))-1;
+x_coord=((xx-0.5)*(2/T.reference_object_entire.ImageSize(2)))-1;
+y_coord=((yy-0.5)*(2/T.reference_object_entire.ImageSize(1)))-1;
  switch jacobianchooser
      case bi2de([1 1 1 1 1 1])  
         %full jacobian
-        calculated_jacobian=[1,0,-xx,xx*yy,-xx^2-1,yy;
-                             0,1,-yy,yy^2+1,-xx*yy,-xx];
+        calculated_jacobian=[-1,0,x_coord,x_coord*y_coord,-x_coord^2-1,y_coord;
+                             0,-1,y_coord,y_coord^2+1,-x_coord*y_coord,-x_coord];
      case bi2de([1 1 1 1 1 0])
         %jacobian x translation y translation x rotation y rotation
-        calculated_jacobian=[1,0,-xx,xx*yy,-xx^2-1, 0;... %correct
-                            0,1,-yy,yy^2+1,-xx*yy,0];                    
+        calculated_jacobian=[1,0,-x_coord,x_coord*y_coord,-x_coord^2-1, 0;... %correct
+                            0,1,-y_coord,y_coord^2+1,-x_coord*y_coord,0];                    
      case bi2de([1 1 0 1 1 0])
         %jacobian x translation y translation x rotation y rotation
-        calculated_jacobian=[1,0,0,xx*yy,-xx^2-1, 0;...
-                            0,1,0,yy^2+1,-xx*yy,0];
+        calculated_jacobian=[1,0,0,x_coord*y_coord,-x_coord^2-1, 0;...
+                            0,1,0,y_coord^2+1,-x_coord*y_coord,0];
      case bi2de([0 0 1 1 1 1])
-          calculated_jacobian=[0,0,xx,xx*yy,-xx^2-1, yy;...
-                            0,0,yy,yy^2+1,-xx*yy,-xx];
+          calculated_jacobian=[0,0,x_coord,x_coord*y_coord,-x_coord^2-1, y_coord;...
+                            0,0,y_coord,y_coord^2+1,-x_coord*y_coord,-x_coord];
      
      case bi2de([1 1 1 0 0 1])
         %jacobian x translation y translation z translation z rotation
-        calculated_jacobian=[1,0,-xx,0,0,yy;0,1,-yy,0,0,-xx]; %correct
+        calculated_jacobian=[-1,0,x_coord,0,0,y_coord;0,-1,y_coord,0,0,-x_coord]; %correct
      case bi2de([1 1 1 0 0 0])
         %jacobian x,y,z translation
-         calculated_jacobian=[1,0,-xx,0,0,0;0,1,-yy,0,0,0]; %correct 
+         calculated_jacobian=[-1,0,x_coord,0,0,0;0,-1,y_coord,0,0,0]; %correct 
      case bi2de([1 1 0 0 0 1])
         %rotation z and translation x y jacobian
-        calculated_jacobian=[1,0,0,0,0,yy;0,1,0,0,0,-xx]; % correct
+        calculated_jacobian=[1,0,0,0,0,y_coord;0,1,0,0,0,-x_coord]; % correct
      case bi2de([0 0 0 1 1 0])
-          calculated_jacobian=[0,0,0,-xx*yy,-xx^2-1, 0;0,0,0,yy^2-1,-xx*yy,0];
+          calculated_jacobian=[0,0,0,-x_coord*y_coord,-x_coord^2-1, 0;0,0,0,y_coord^2-1,-x_coord*y_coord,0];
      case bi2de([1 1 0 0 0 0])
         %translation x y jacobian
-        calculated_jacobian=[1,0,0,0,0,0;0,1,0,0,0,0]; %correct
+        calculated_jacobian=[-1,0,0,0,0,0;0,-1,0,0,0,0]; %correct
      case bi2de([1 0 0 0 0 0])
         %translation x jacobian
         calculated_jacobian=[1,0,0,0,0,0;0,0,0,0,0,0];  %correct
@@ -60,18 +60,18 @@ for yy=1:T.reference_object_entire.ImageSize(1)
         calculated_jacobian=[0,0,0,0,0,0;0,1,0,0,0,0]; %correct
      case bi2de([0 0 0 0 0 1])
          %rotation jacobian
-         calculated_jacobian=[0,0,0,0,0,yy;0,0,0,0,0,-xx];   %correct
+         calculated_jacobian=[0,0,0,0,0,y_coord;0,0,0,0,0,-x_coord];   %correct
      case bi2de([0 0 1 0 0 0])
         %scaling jacobian
-        calculated_jacobian=[0,0,-xx,0,0,0;0,0,-yy,0,0,0]; % correct 
+        calculated_jacobian=[0,0,-x_coord,0,0,0;0,0,-y_coord,0,0,0]; % correct 
      case bi2de([0 0 0 0 1 0])
         %rotation y jacobian
-        calculated_jacobian=[0,0,0,0,-xx^2-1, 0;...
-                             0,0,0,0,-xx*yy,0];   
+        calculated_jacobian=[0,0,0,0,-x_coord^2-1, 0;...
+                             0,0,0,0,-x_coord*y_coord,0];   
      case  bi2de([0 0 0 1 0 0])
         %rotation x jacobian
-        calculated_jacobian=[0,0,0,xx*yy,0, 0;...
-                             0,0,0,yy^2+1,0,0];
+        calculated_jacobian=[0,0,0,x_coord*y_coord,0, 0;...
+                             0,0,0,y_coord^2+1,0,0];
      otherwise
         error('no valid jacobian choosen')
  end
